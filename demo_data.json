@@ -1,0 +1,18 @@
+[
+  {
+    "title": "QuantumEdge Acquisition",
+    "description": "Due diligence on acquiring a Series B quantum computing software startup.",
+    "input_type": "enterprise_proposal",
+    "input_data": {
+      "content": "QuantumEdge has developed a proprietary error-correction algorithm for NISQ computers. Asking price is $150M. They claim a $2B TAM by 2030 but currently have only 3 enterprise pilots and a $1.2M burn rate. Tech stack is C++ and Python."
+    }
+  },
+  {
+    "title": "MediChain Series A",
+    "description": "Evaluate investment in blockchain-based healthcare records startup.",
+    "input_type": "startup_idea",
+    "input_data": {
+      "content": "MediChain aims to put all patient EHRs on a public ledger. Seeking $10M at a $40M valuation. The founder has a background in crypto but no healthcare experience. They plan to monetize by selling anonymized data to pharma."
+    }
+  }
+]

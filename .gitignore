@@ -1,0 +1,49 @@
+# ──── Dependencies ────
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# ──── Environment ────
+.env
+.env.local
+.env.production
+.env.*.local
+backend/.env
+frontend/.env.local
+
+# ──── Next.js ────
+frontend/.next/
+frontend/out/
+frontend/.vercel
+
+# ──── Python ────
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ──── IDE ────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ──── Testing ────
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ──── Misc ────
+*.log
+*.pid
+*.seed
+*.pid.lock
+.cache/
