@@ -5,7 +5,7 @@ import { cn } from '../Network/AgentNode';
 export default function ExecutiveSummary() {
   const { report, status } = useInvestigationStore();
 
-  if (status !== 'complete' && !report) {
+  if (status !== 'completed' && !report) {
     return (
       <div className="h-full flex flex-col items-center justify-center p-8 text-center bg-slate-950/40 rounded-xl border border-white/5 backdrop-blur-md">
         <FileText className="w-12 h-12 text-slate-700 mb-4" />
@@ -26,7 +26,10 @@ export default function ExecutiveSummary() {
           <FileText className="w-5 h-5 text-emerald-400" />
           Final Compiled Report
         </h3>
-        <button className="flex items-center gap-2 text-xs font-medium text-emerald-400 bg-emerald-400/10 hover:bg-emerald-400/20 px-3 py-1.5 rounded-lg transition-colors border border-emerald-400/20">
+        <button 
+          onClick={() => window.print()}
+          className="flex items-center gap-2 text-xs font-medium text-emerald-400 bg-emerald-400/10 hover:bg-emerald-400/20 px-3 py-1.5 rounded-lg transition-colors border border-emerald-400/20"
+        >
           <Download className="w-3.5 h-3.5" />
           Export PDF
         </button>
@@ -76,25 +79,61 @@ export default function ExecutiveSummary() {
           <div className="grid grid-cols-2 gap-6">
             <section>
               <h4 className="text-sm font-semibold text-emerald-400 mb-3 uppercase tracking-wider border-b border-white/5 pb-2">Key Opportunities</h4>
-              <ul className="space-y-2">
-                {report?.opportunities?.map((opp: any, i: number) => (
-                  <li key={i} className="text-sm text-slate-400 flex items-start gap-2">
-                    <span className="text-emerald-400 mt-0.5">•</span>
-                    <span>{typeof opp === 'string' ? opp : opp.title || opp.description}</span>
-                  </li>
-                ))}
+              <ul className="space-y-3">
+                {report?.opportunities && report.opportunities.length > 0 ? (
+                  report.opportunities.map((opp: any, i: number) => (
+                    <li key={i} className="text-sm text-slate-300 bg-slate-900/20 border border-emerald-500/10 p-3 rounded-lg flex flex-col gap-1.5 hover:border-emerald-500/20 transition-all duration-200">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-emerald-400">{typeof opp === 'string' ? opp : opp.title}</span>
+                        {opp.severity && (
+                          <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                            {opp.severity}
+                          </span>
+                        )}
+                      </div>
+                      {opp.description && (
+                        <p className="text-xs text-slate-400 leading-relaxed">{opp.description}</p>
+                      )}
+                      {opp.agent_type && (
+                        <span className="text-[10px] text-slate-500 font-mono tracking-wider uppercase mt-1">
+                          Source: {opp.agent_type.replace('_', ' ')}
+                        </span>
+                      )}
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-500 italic">No opportunities identified.</p>
+                )}
               </ul>
             </section>
 
             <section>
               <h4 className="text-sm font-semibold text-red-400 mb-3 uppercase tracking-wider border-b border-white/5 pb-2">Critical Risks</h4>
-              <ul className="space-y-2">
-                {report?.risks?.map((risk: any, i: number) => (
-                  <li key={i} className="text-sm text-slate-400 flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5">•</span>
-                    <span>{typeof risk === 'string' ? risk : risk.title || risk.description}</span>
-                  </li>
-                ))}
+              <ul className="space-y-3">
+                {report?.risks && report.risks.length > 0 ? (
+                  report.risks.map((risk: any, i: number) => (
+                    <li key={i} className="text-sm text-slate-300 bg-slate-900/20 border border-red-500/10 p-3 rounded-lg flex flex-col gap-1.5 hover:border-red-500/20 transition-all duration-200">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-red-400">{typeof risk === 'string' ? risk : risk.title}</span>
+                        {risk.severity && (
+                          <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/25">
+                            {risk.severity}
+                          </span>
+                        )}
+                      </div>
+                      {risk.description && (
+                        <p className="text-xs text-slate-400 leading-relaxed">{risk.description}</p>
+                      )}
+                      {risk.agent_type && (
+                        <span className="text-[10px] text-slate-500 font-mono tracking-wider uppercase mt-1">
+                          Source: {risk.agent_type.replace('_', ' ')}
+                        </span>
+                      )}
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-500 italic">No risks identified.</p>
+                )}
               </ul>
             </section>
           </div>

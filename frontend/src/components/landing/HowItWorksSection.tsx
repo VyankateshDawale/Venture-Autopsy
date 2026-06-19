@@ -89,7 +89,7 @@ export function HowItWorksSection() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   return (
-    <section className="py-24 relative bg-gray-950 border-t border-b border-white/5">
+    <section id="how-it-works" className="py-24 relative bg-gray-950 border-t border-b border-white/5">
       <div className="container px-4 md:px-6 mb-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
