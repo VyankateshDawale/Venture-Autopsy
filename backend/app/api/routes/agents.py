@@ -12,6 +12,7 @@ from app.models.agent import AgentDetailResponse, AgentResponse, RecruitSpeciali
 from app.models.conflict import ConflictParticipantResponse, ConflictResponse
 from app.models.finding import FindingResponse, FindingCategory, FindingSeverity
 from app.models.timeline import TimelineEventResponse
+from app.agents.registry import AgentRegistry
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -33,7 +34,14 @@ async def list_agents(investigation_id: UUID, db: SupabaseDep) -> list[AgentResp
         .order("created_at")
         .execute()
     )
-    return [AgentResponse(**r) for r in (result.data or [])]
+    agents_list = []
+    for r in (result.data or []):
+        agent_type = r.get("agent_type")
+        config = AgentRegistry.AGENT_CONFIGS.get(agent_type)
+        if config:
+            r["role"] = config["role"]
+        agents_list.append(AgentResponse(**r))
+    return agents_list
 
 
 @router.get(
@@ -57,6 +65,12 @@ async def get_agent(
     if not agent.data:
         raise HTTPException(status_code=404, detail="Agent not found")
 
+    agent_data = dict(agent.data)
+    agent_type = agent_data.get("agent_type")
+    config = AgentRegistry.AGENT_CONFIGS.get(agent_type)
+    if config:
+        agent_data["role"] = config["role"]
+
     findings_result = (
         db.table("findings")
         .select("*")
@@ -65,7 +79,7 @@ async def get_agent(
         .execute()
     )
     findings = [FindingResponse(**f) for f in (findings_result.data or [])]
-    return AgentDetailResponse(**agent.data, findings=findings)
+    return AgentDetailResponse(**agent_data, findings=findings)
 
 
 @router.post(

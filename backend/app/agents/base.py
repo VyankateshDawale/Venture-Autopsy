@@ -93,12 +93,13 @@ class BaseAgent(ABC):
     async def _update_status(self, investigation_id: str, agent_id: str, status: str) -> None:
         """Update agent status over WS and save to DB."""
         try:
+            db_role = "specialist" if self.agent_type in ["cybersecurity", "healthcare", "fintech", "legal", "infrastructure"] else "core"
             self.db.table("investigation_agents").upsert({
                 "id": agent_id,
                 "investigation_id": investigation_id,
                 "agent_type": self.agent_type,
                 "agent_name": self.name,
-                "role": self.role,
+                "role": db_role,
                 "status": status
             }).execute()
         except Exception as e:

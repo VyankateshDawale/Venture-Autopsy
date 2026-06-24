@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from app.models.finding import FindingResponse
 
 
-AgentRole = Literal["core", "specialist"]
+AgentRole = str
 
 AgentStatus = Literal[
     "pending",
