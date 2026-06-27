@@ -82,7 +82,15 @@ export function SelectValue({ placeholder }: { placeholder?: string }) {
   
   const displayValue = context.value ? context.items[context.value] : null
   
-  return <span className="truncate">{displayValue || placeholder}</span>
+  // Format raw value nicely if items aren't registered in context yet
+  const fallbackLabel = context.value
+    ? context.value
+        .split(/[_-]/)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+    : null;
+  
+  return <span className="truncate">{displayValue || fallbackLabel || placeholder}</span>
 }
 
 export function SelectContent({
